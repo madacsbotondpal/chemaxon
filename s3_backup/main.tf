@@ -3,8 +3,8 @@ resource "aws_s3_bucket" "backup" {
   bucket = "backup-bucket-${var.environment}"
 
   tags = {
-    Name = "backup-bucket-${var.environment}"
-    Created_by = "Terraform"
+    Name          = "backup-bucket-${var.environment}"
+    Created_by    = "Terraform"
     Creation_date = formatdate("YYYY-MM-DD HH:mm:ss", timestamp())
   }
   lifecycle { ignore_changes = [tags["Create_date"]] }
@@ -36,7 +36,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "bucket_encryption
 resource "aws_s3_bucket_versioning" "bucket_versioning" {
   bucket = aws_s3_bucket.backup.id
   versioning_configuration {
-    status = "Enabled"
+    status     = "Enabled"
     mfa_delete = "Enabled"
   }
 }
@@ -47,10 +47,10 @@ resource "aws_s3_bucket_lifecycle_configuration" "bucket_lifecycle_configuration
   bucket = aws_s3_bucket.backup.id
 
   rule {
-    id = "move-later-delete"
+    id     = "move-later-delete"
     status = "Enabled"
     transition {
-      days = 30
+      days          = 30
       storage_class = "GLACIER"
     }
     expiration {
@@ -65,7 +65,7 @@ data "aws_iam_policy_document" "backup_bucket_policy" {
     sid    = "AllExceptUser"
     effect = "Deny"
     principals {
-      type = "AWS"
+      type        = "AWS"
       identifiers = ["*"]
     }
 
@@ -92,8 +92,8 @@ data "aws_iam_policy_document" "backup_bucket_policy" {
 
 # Assign the above mentioned bucket policy
 resource "aws_s3_bucket_policy" "bucket_policy" {
-    bucket = aws_s3_bucket.backup.id
-    policy = data.aws_iam_policy_document.backup_bucket_policy.json
+  bucket = aws_s3_bucket.backup.id
+  policy = data.aws_iam_policy_document.backup_bucket_policy.json
 }
 
 # Create bucket for the backup bucket logs
@@ -101,8 +101,8 @@ resource "aws_s3_bucket" "logging" {
   bucket = "logging-bucket-${var.environment}"
 
   tags = {
-    Name = "logging-bucket-${var.environment}"
-    Created_by = "Terraform"
+    Name          = "logging-bucket-${var.environment}"
+    Created_by    = "Terraform"
     Creation_date = formatdate("YYYY-MM-DD HH:mm:ss", timestamp())
   }
   lifecycle { ignore_changes = [tags["Create_date"]] }
@@ -121,7 +121,7 @@ resource "aws_s3_bucket_logging" "bucket_logging" {
 resource "aws_s3_bucket_versioning" "bucket_log_versioning" {
   bucket = aws_s3_bucket.logging.id
   versioning_configuration {
-    status = "Enabled"
+    status     = "Enabled"
     mfa_delete = "Enabled"
   }
 }
@@ -141,10 +141,10 @@ resource "aws_s3_bucket_lifecycle_configuration" "bucket_log_lifecycle_configura
   bucket = aws_s3_bucket.logging.id
 
   rule {
-    id = "move-later-delete"
+    id     = "move-later-delete"
     status = "Enabled"
     transition {
-      days = 30
+      days          = 30
       storage_class = "GLACIER"
     }
     expiration {

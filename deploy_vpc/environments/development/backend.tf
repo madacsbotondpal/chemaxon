@@ -2,7 +2,7 @@
 terraform {
   backend "s3" {
     bucket = "vpc-backend-madacsbp"
-    key = "develop/terraform.tfstate"
+    key    = "develop/terraform.tfstate"
     region = "eu-central-1"
   }
 }

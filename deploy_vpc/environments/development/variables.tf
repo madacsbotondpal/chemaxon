@@ -1,38 +1,38 @@
 # Environment variable is used for differentiating between different stages of development
 variable "environment" {
-    description = "Current environment to deploy (e.g. development, staging or production)"
-    type = string
-    default = "development"
+  description = "Current environment to deploy (e.g. development, staging or production)"
+  type        = string
+  default     = "development"
 }
 
 variable "region" {
-    description = "Region to deploy"
-    type = string
-    default = "eu-central-1"
+  description = "Region to deploy"
+  type        = string
+  default     = "eu-central-1"
 }
 
 variable "vpc_cidr" {
   description = "CIDR block for the VPC"
-  type = string
-  default = "10.0.0.0/16"
+  type        = string
+  default     = "10.0.0.0/16"
 }
 
 # Private subnet CIDRs, Public subnet CIDRs and availability zones can be changed here 
 # with additional CIDRs we can create more subnets in different availability zones
 variable "private_subnet_cidr" {
-    description = "CIDR blocks for the private subnets"
-    type = list(string)
-    default = ["10.0.1.0/24", "10.0.2.0/24"]
+  description = "CIDR blocks for the private subnets"
+  type        = list(string)
+  default     = ["10.0.1.0/24", "10.0.2.0/24"]
 }
 
 variable "public_subnet_cidr" {
-    description = "CIDR blocks for the public subnets"
-    type = list(string)
-    default = [ "10.0.3.0/24", "10.0.4.0/24"]
+  description = "CIDR blocks for the public subnets"
+  type        = list(string)
+  default     = ["10.0.3.0/24", "10.0.4.0/24"]
 }
 
 variable "availability_zone" {
-    description = "Availability zone for the subnet"
-    type = list(string)
-    default = [ "eu-central-1a", "eu-central-1b" ]
+  description = "Availability zone for the subnet"
+  type        = list(string)
+  default     = ["eu-central-1a", "eu-central-1b"]
 }
