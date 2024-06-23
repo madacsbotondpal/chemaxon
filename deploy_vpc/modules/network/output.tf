@@ -1,4 +1,4 @@
-# Returning IDs (VPC and subnet) for future use (e.g. creating VMs)
+# Returning IDs (VPC and subnet) for future use (e.g. creating VMs and connecting any subnet)
 output "vpc_id" {
   description = "VPC ID"
   value = aws_vpc.main.id

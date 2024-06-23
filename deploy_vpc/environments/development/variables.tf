@@ -1,3 +1,4 @@
+# Environment variable is used for differentiating between different stages of development
 variable "environment" {
     description = "Current environment to deploy (e.g. development, staging or production)"
     type = string
@@ -16,6 +17,8 @@ variable "vpc_cidr" {
   default = "10.0.0.0/16"
 }
 
+# Private subnet CIDRs, Public subnet CIDRs and availability zones can be changed here 
+# with additional CIDRs we can create more subnets in different availability zones
 variable "private_subnet_cidr" {
     description = "CIDR blocks for the private subnets"
     type = list(string)

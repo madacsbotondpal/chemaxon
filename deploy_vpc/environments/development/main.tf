@@ -1,3 +1,4 @@
+# Contains a single module with all the networking part, more modules could be added here
 module "network" {
   source = "../../modules/network"
 

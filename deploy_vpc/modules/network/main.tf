@@ -1,3 +1,4 @@
+# I tag all of the resources with Name, Created_by and Creation_date to know who (Terraform) and when the resources were created
 resource "aws_vpc" "main" {
   cidr_block = var.vpc_cidr
 
@@ -9,6 +10,7 @@ resource "aws_vpc" "main" {
   lifecycle { ignore_changes = [tags["Create_date"]] }
 }
 
+# All resources which are needed for the private subnet can be found below
 resource "aws_subnet" "private" {
   count  = length(var.private_subnet_cidr)
   vpc_id = aws_vpc.main.id
@@ -34,6 +36,8 @@ resource "aws_eip" "nat_elastic_ip" {
   lifecycle { ignore_changes = [tags["Create_date"]] }
 }
 
+# Nat gateway is needed to reach services outside of the VPC
+# without letting external services to make connection inside the private subnet
 resource "aws_nat_gateway" "nat_gateway" {
   allocation_id = aws_eip.nat_elastic_ip.id
   subnet_id = element(aws_subnet.public[*].id, 0)
@@ -46,6 +50,7 @@ resource "aws_nat_gateway" "nat_gateway" {
   lifecycle { ignore_changes = [tags["Create_date"]] }
 }
 
+# Creating the private route table and associating it with the private subnet
 resource "aws_route_table" "private_route_table" {
   vpc_id = aws_vpc.main.id
 
@@ -66,7 +71,9 @@ resource "aws_route_table_association" "private_route_table_association" {
   subnet_id = element(aws_subnet.private[*].id, count.index)
   route_table_id = aws_route_table.private_route_table.id
 }
+# /Private resources
 
+# All resources which are needed for the private subnet can be found below
 resource "aws_subnet" "public" {
   count  = length(var.public_subnet_cidr)
   vpc_id = aws_vpc.main.id
@@ -82,6 +89,7 @@ resource "aws_subnet" "public" {
   lifecycle { ignore_changes = [tags["Create_date"]] }
 }
 
+# An internet gateway is needed to reach the public internet
 resource "aws_internet_gateway" "gateway" {
   vpc_id = aws_vpc.main.id
   tags = {
@@ -92,6 +100,7 @@ resource "aws_internet_gateway" "gateway" {
   lifecycle { ignore_changes = [tags["Create_date"]] }
 }
 
+# Creating the public route table and associating it with the public subnet
 resource "aws_route_table" "public_route_table" {
   vpc_id = aws_vpc.main.id
 
@@ -112,7 +121,9 @@ resource "aws_route_table_association" "public_route_table_association" {
   subnet_id = element(aws_subnet.public[*].id, count.index)
   route_table_id = aws_route_table.public_route_table.id
 }
+# /Public resources 
 
+# Creating the VPC endpoint for the S3 service
 resource "aws_vpc_endpoint" "s3_endpoint" {
   vpc_id = aws_vpc.main.id
   service_name = "com.amazonaws.${var.region}.s3"
