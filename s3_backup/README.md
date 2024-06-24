@@ -8,7 +8,7 @@ Actually uploading the files as a cron job or something is not part of this exer
 
 # S3 Bucket configuration 
 
-This directory contains the partial configuration of an S3 bucket, which is used to store backup files for 180 days and a log bucket, which stores the backup buckets access logs.
+This directory contains the **partial configuration** of an S3 bucket, which is used to store backup files for 180 days and a log bucket, which stores the backup buckets access logs.
 I create different terraform resources to make sure that our backup is safe, reduntant and cost effective. 
 -  `aws_s3_bucket_public_access_block` - lets you block all public access
 -  `aws_s3_bucket_server_side_encryption_configuration` - encypts all objects in the bucket
@@ -18,3 +18,7 @@ I create different terraform resources to make sure that our backup is safe, red
 -  `aws_s3_bucket_logging` with a log bucket - make sure that we can log all server accesses 
 
 We ensure resource security by disallowing public access, server-side encryption and restricting access. We optimise costs by moving objects to the glacier class after 30 days and deleting them after 180 days. With backups and bucket versioning, we have enough data redundancy for various emergencies.
+
+# Options to consider
+
+To save costs, the above configurations can be changed. For example, we can use DEEP_ARCHIVE class for even cheaper (which is slower, with higher retrieval time) object storage class or we can put our object to these kind of object classes earlier than 30 days.  

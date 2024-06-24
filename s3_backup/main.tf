@@ -1,4 +1,5 @@
 # Creating a bucket for backup storage
+# Important note, bucket names must be unique across all AWS accounts in all the AWS Regions within a partition.
 resource "aws_s3_bucket" "backup" {
   bucket = "backup-bucket-${var.environment}"
 
